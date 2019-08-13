@@ -14,15 +14,15 @@ indicators
     *close
     *simple MA 50 (need 150 dp)
     *simple MA 200 (need 300 dp)
-    exp MA 50
-    exp MA 200
-    tri MA
+    *exp MA 50
+    *exp MA 200
+    *tri MA 50
+    #tri MA 200
     MACD
     RSI (14 day)
-    weighted MA
-    Bollinger band upper
-    bollinger band middle
-    bollinger band lower
+    Bollinger band upper (sma20 + 2sigma(20-day close))
+    bollinger band middle (sma20)
+    bollinger band lower (sma20 - 2sigma(20-day close))
     parabolic sar
     time series forecast
     typical price
@@ -89,22 +89,47 @@ def ema50(df):
     if(df.shape[0] < 150):
         raise ValueError("DataFrame must have 150 or more rows")
 
+    k = 2/51
     ema50 = pd.Series(np.zeros(df.shape[0]))
     ema50[50] = df.loc[50, 'sma50'] #first period of calculation is SMA
     for i in range(51, ema50.shape[0]):
+        ema50[i] = (k*df.loc[i, 'close']) + ((1-k)*ema50[i - 1])
         
-    k = 2/51
-
-    return
+    df['ema50'] = ema50
+    return df
 
 def ema200(df):
+    if(df.shape[0] < 300):
+        raise ValueError("DataFrame must have 300 or more rows")
+
+    k = 2/201
+    ema200 = pd.Series(np.zeros(df.shape[0]))
+    ema200[200] = df.loc[200, 'sma200'] #first period of calculation is SMA
+    for i in range(201, ema200.shape[0]):
+        ema200[i] = (k*df.loc[i, 'close']) + ((1-k)*ema200[i - 1])
     return
 
 def tma50(df):
-    return
+    if(df.shape[0] < 150):
+        raise ValueError("DataFrame must have 150 or more rows")
+
+    tma50 = pd.Series(np.zeros(df.shape[0]))
+    for i in range(50, tma50.shape[0]):
+        tma50[i] = np.mean(df.loc[i-50:i, 'sma50'])
+    
+    df['tma50'] = tma50
+    return df
 
 def tma200(df):
-    return
+    if(df.shape[0] < 300):
+        raise ValueError("DataFrame must have 300 or more rows")
+
+    tma200 = pd.Series(np.zeros(df.shape[0]))
+    for i in range(200, tma200.shape[0]):
+        tma200[i] = np.mean(df.loc[i-200:i, 'sma200'])
+    
+    df['tma200'] = tma200
+    return df
 
 def macd(df):
     return
@@ -119,6 +144,7 @@ def rsi(df):
 df = ohlcv('MMM', 300)
 df = sma50(df)
 df = sma200(df)
+df = ema50(df)
 print(df)
 
 
