@@ -9,3 +9,4 @@ lstm_model.h5
 lstm_weights2.h5
 lstm_weights3.h5
 README.md
+__pycache__
