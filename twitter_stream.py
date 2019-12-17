@@ -17,7 +17,7 @@ OAUTH_TOKEN_SECRET = 'DR9uu6yyE2uxvGmdDQ7bCITqFwe1Ek1ahfkSVNnG7oiGI'
 print('running... theoretically')
 stream = MyStreamer(APP_KEY, APP_SECRET,
                     OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-track = ['#MMM','#AXP','#AAPL','#BA','#CVX','#CSCO','#KO','#DWDP',
+track = ['#MMM','#AXP','#AAPL','#BA','#CVX','#CSCO','#KO','#DWDP', 'DIS', 
         '#XOM','#GS','#HD','#IBM','#INTC','#JNJ','#JPM','#MCD','#MRK','#MSFT']
         
 stream.statuses.filter(track=','.join(track))

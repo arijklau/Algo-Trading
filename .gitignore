@@ -1,0 +1,11 @@
+.ipynb_checkpoints
+.vscode
+ajk4wa-project3
+data
+scaled_data
+ajk4wa-project3.zip
+DMFinalProj.ipynb
+lstm_model.h5
+lstm_weights2.h5
+lstm_weights3.h5
+README.md
