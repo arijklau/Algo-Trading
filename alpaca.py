@@ -1,6 +1,7 @@
 import alpaca_trade_api as tradeapi
 import pandas as pd
 import numpy as np
+from datetime import date as dt
 
 '''
 indicators
@@ -26,12 +27,25 @@ class AlpacaStreamer:
 
     def loadData(self, stock, days=100, date=False):
         if(date):
-            df = ohlcv(stock, days, date)
+            df = ohlcv(stock, days + 200, date)
         else:
-            df = ohlcv(stock, 100)
+            df = ohlcv(stock, days + 200, dt.today())
         populate_df(df)
-        return df
+        return df.iloc[df.shape[0]-days:df.shape[0]]
 
+class AlpacaTrader:
+
+    def getPositions(self):
+        return api.list_positions()
+
+    def getPrice(self, symbol):
+        return api.get_barset(symbol, '1D', limit=2)[symbol][1].c
+
+    def makeTrade(self, symbol, qty, buy=True):
+        if(buy == False):
+            api.submit_order(symbol, qty, 'sell', 'market', 'day')
+        else:
+            api.submit_order(symbol, qty, 'buy', 'market', 'day')
 
 endpoint = 'https://paper-api.alpaca.markets'
 key_id = 'PK35ENGBMQNOF6K1NCK7'
